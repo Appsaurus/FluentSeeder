@@ -18,7 +18,10 @@ let package = Package(
         .package(url: "https://github.com/Appsaurus/FluentSeeder", from: "0.1.0"),
     ],
     targets: [
-      .testTarget(name: "YourApp", dependencies: ["FluentSeeder", ... ])
+      //If just using for test purposes (recommended use case)
+      .testTarget(name: "YourAppTests", dependencies: ["FluentSeeder", ... ])
+      //Not recommended but still possible to use to seed your actual app.
+      .target(name: "YourApp", dependencies: ["FluentSeeder", ... ])
     ]
 )
         
