@@ -24,7 +24,7 @@ public protocol SeedProtocol{
 open class Seed<M: Seedable>: SeedProtocol where M.Database: MigrationSupporting{
 	open var count: Int
 	open var factory: ModelFactory<M> = .random
-	public init(count: Int = 100, factory: ModelFactory<M> = .random) {
+	public required init(count: Int = 100, factory: ModelFactory<M> = .random) {
 		self.count = count
 		self.factory = factory
 	}
@@ -40,7 +40,7 @@ open class Seed<M: Seedable>: SeedProtocol where M.Database: MigrationSupporting
 
 extension Seed: Migration{
 
-	open static var count: Int{
+    public static var count: Int{
 		return self<M>.init().count
 	}
 	public typealias Database = M.Database
@@ -66,7 +66,7 @@ where M.Database: JoinSupporting, M.Database == M.Left.Database, M.Database == M
 	open var leftQuery: QueryBuilder<M.Left.Database, M.Left>?
 	open var rightQuery: QueryBuilder<M.Right.Database, M.Right>?
 	open var direction: SiblingSeedDirection
-	public init(count: Int = 5, leftQuery: QueryBuilder<M.Left.Database, M.Left>? = nil, rightQuery: QueryBuilder<M.Right.Database, M.Right>? = nil, direction: SiblingSeedDirection = .rightToLeft) {
+	public required init(count: Int = 5, leftQuery: QueryBuilder<M.Left.Database, M.Left>? = nil, rightQuery: QueryBuilder<M.Right.Database, M.Right>? = nil, direction: SiblingSeedDirection = .rightToLeft) {
 		self.count = count
 		self.leftQuery = leftQuery
 		self.rightQuery = rightQuery
@@ -89,7 +89,7 @@ where M.Database: JoinSupporting, M.Database == M.Left.Database, M.Database == M
 
 extension SiblingSeed: Migration{
 
-	open static var count: Int{
+    public static var count: Int{
 		return self<M>.init().count
 	}
 	public typealias Database = M.Database

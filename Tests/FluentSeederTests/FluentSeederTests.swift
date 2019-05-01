@@ -25,15 +25,15 @@ final class FluentSeederTests: FluentTestCase {
 
 	let sqlite: SQLiteDatabase = try! SQLiteDatabase(storage: .memory)
 
-	open override func register(_ services: inout Services) throws {
+    public override func register(_ services: inout Services) throws {
 		try services.register(FluentSQLiteProvider())
 		services.register(sqlite)
 	}
-	open override func configure(databases: inout DatabasesConfig) throws{
+    public override func configure(databases: inout DatabasesConfig) throws{
 		databases.add(database: sqlite, as: .sqlite)
 	}
 
-	open override func configure(migrations: inout MigrationConfig){
+    public override func configure(migrations: inout MigrationConfig){
 		super.configure(migrations: &migrations)
 		migrations.add(model: ExampleModel.self, database: .sqlite)
 		migrations.add(model: ExampleSiblingModel.self, database: .sqlite)
@@ -68,7 +68,7 @@ final class FluentSeederTests: FluentTestCase {
 
 public class ExampleSeeder: Seeder{
 	public typealias Database = SQLiteDatabase
-	open static func seeds() -> [SeedProtocol]{
+    public static func seeds() -> [SeedProtocol]{
 		return [
 			//Seed models first
 			Seed<ExampleModel>(count: exampleModelCount),
