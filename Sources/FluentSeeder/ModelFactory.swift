@@ -42,11 +42,11 @@ public enum ModelFactory<M: Model>{
 			model = try factory.randomized(type: M.self)
 		case .emptyInitialized:
 			if let initializableType = M.self as? EmptyInitializable.Type{
-				model = initializableType.init() as! M
+				model = initializableType.init() as? M
 			}
 			else{
 				//TODO: Test this, pretty sure all tested models have implemented EmptyInitializable so far.
-				model = try createInstance(of: M.self) as! M
+				model = try createInstance(of: M.self) as? M
 			}
 		case .custom(let initializer):
 			model = initializer()

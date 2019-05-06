@@ -76,7 +76,7 @@ extension Model where Self: Decodable{
 fileprivate extension Future where Expectation: Vapor.OptionalType {
 	/// Unwraps an optional value contained inside a Future's expectation.
 	/// If the optional resolves to `nil` (`.none`), the supplied error will be thrown instead.
-	fileprivate func unwrap(or resolve: @escaping () -> Future<Expectation.WrappedType>) -> Future<Expectation.WrappedType> {
+    func unwrap(or resolve: @escaping () -> Future<Expectation.WrappedType>) -> Future<Expectation.WrappedType> {
 		return flatMap(to: Expectation.WrappedType.self) { optional in
 			guard let _ = optional.wrapped else {
 				return resolve()
