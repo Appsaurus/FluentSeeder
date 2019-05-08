@@ -207,7 +207,7 @@ extension Model {
 													  on conn: DatabaseConnectable) -> Future<Void>{
 		let parentQuery = parentQuery ?? query(on: conn)
 		return parentQuery.iterate(on: conn) { (model) -> EventLoopFuture<[C]> in
-			let futureChildren = childQuery?.random(count: count) ?? C.random(on: conn, count: count)
+			let futureChildren = childQuery?.randomSlice(count: count) ?? C.random(on: conn, count: count)
 			return futureChildren.flatMap({ children -> EventLoopFuture<[C]> in
 				children.forEach({ (child) in
 					var child = child
@@ -243,7 +243,7 @@ extension ModifiablePivot where Self: Migration, Database: JoinSupporting, Datab
 										   on conn: DatabaseConnectable) -> Future<Void>{
 		let leftQuery = leftQuery ?? Left.query(on: conn)
 		return leftQuery.iterate(on: conn, { (model) -> EventLoopFuture<[Self]> in
-			let modelsToAttach = rightQuery?.random(count: count) ?? Right.random(on: conn, count: count)
+			let modelsToAttach = rightQuery?.randomSlice(count: count) ?? Right.random(on: conn, count: count)
 			return modelsToAttach.flatMap({ modelsToAttach -> EventLoopFuture<[Self]> in
 				let siblings: Siblings<Left, Right, Self> = model.siblings()
 				return siblings.attach(modelsToAttach, on: conn)
@@ -257,7 +257,7 @@ extension ModifiablePivot where Self: Migration, Database: JoinSupporting, Datab
 										   on conn: DatabaseConnectable) -> Future<Void>{
 		let rightQuery = rightQuery ?? Right.query(on: conn)
 		return rightQuery.iterate(on: conn, { (model) -> EventLoopFuture<[Self]> in
-			let modelsToAttach = leftQuery?.random(count: count) ?? Left.random(on: conn, count: count)
+			let modelsToAttach = leftQuery?.randomSlice(count: count) ?? Left.random(on: conn, count: count)
 			return modelsToAttach.flatMap({ modelsToAttach -> EventLoopFuture<[Self]> in
 				let siblings: Siblings<Right, Left, Self> = model.siblings()
 				return siblings.attach(modelsToAttach, on: conn)

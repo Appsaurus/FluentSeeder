@@ -105,8 +105,8 @@
         "repositoryURL": "https://github.com/Appsaurus/FluentExtensions",
         "state": {
           "branch": null,
-          "revision": "176520c502e0ee612423dc1898e6b161e39eee1b",
-          "version": "0.3.0"
+          "revision": "22157312aea266d009d251688a841439007b53ef",
+          "version": "0.3.5"
         }
       },
       {
@@ -150,8 +150,8 @@
         "repositoryURL": "https://github.com/Appsaurus/RandomFactory",
         "state": {
           "branch": null,
-          "revision": "be759128472b1880ea35cd0bc98da8afeb0466be",
-          "version": "1.0.1"
+          "revision": "07bd6664d771ef536c295d18bf3a4178aa5c3163",
+          "version": "1.0.2"
         }
       },
       {
