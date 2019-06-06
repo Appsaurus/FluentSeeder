@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/Appsaurus/CodableExtensions",
         "state": {
           "branch": null,
-          "revision": "4b8e1fafe94ac99fa53118d63a1ce8b7f075fa67",
-          "version": "1.0.0"
+          "revision": "56572ae1e63b13ec23d9af20348b87e1f33e4b58",
+          "version": "1.0.6"
         }
       },
       {
@@ -78,8 +78,8 @@
         "repositoryURL": "https://github.com/Appsaurus/Fakery",
         "state": {
           "branch": null,
-          "revision": "19637d073bceb2d2b7133d9e2c6f04a982fe5e8a",
-          "version": "3.4.3"
+          "revision": "8d0eafcda7dfd3152a2d86c6c458534428ed3987",
+          "version": "3.4.4"
         }
       },
       {
@@ -105,8 +105,8 @@
         "repositoryURL": "https://github.com/Appsaurus/FluentExtensions",
         "state": {
           "branch": null,
-          "revision": "22157312aea266d009d251688a841439007b53ef",
-          "version": "0.3.5"
+          "revision": "8da1f84eeb68fa58cb44827bdd1d1381361496b0",
+          "version": "0.3.7"
         }
       },
       {
@@ -114,8 +114,8 @@
         "repositoryURL": "https://github.com/Appsaurus/FluentTestUtils",
         "state": {
           "branch": null,
-          "revision": "50f71ca73c27762112d91ad79f17af60226f369a",
-          "version": "0.1.3"
+          "revision": "918311836ff40d0c3e2d4521f4afe836cc622253",
+          "version": "0.1.5"
         }
       },
       {
@@ -150,8 +150,8 @@
         "repositoryURL": "https://github.com/Appsaurus/RandomFactory",
         "state": {
           "branch": null,
-          "revision": "07bd6664d771ef536c295d18bf3a4178aa5c3163",
-          "version": "1.0.2"
+          "revision": "f760f84ee383ba98de5d1cb2b951c1b18fdb7a56",
+          "version": "1.0.3"
         }
       },
       {
