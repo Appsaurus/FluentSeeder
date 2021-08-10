@@ -25,20 +25,19 @@ extension Model where Self: Decodable{
 	@discardableResult
 	static public func create(id: IDValue? = nil, factory: ModelFactory<Self>, on conn: Database) throws -> Future<Self>{
 		let model: Self = try factory.initializeModel(id: id)
-		return model.create(on: conn)
+		return model.createAndReturn(on: conn)
 	}
 
 	@discardableResult
 	static public func createBatch(size: Int, factory: ModelFactory<Self>, on conn: Database) throws -> Future<[Self]>{
-		return Future.flatMap(on: conn, { () -> Future<[Self]> in
-			var models: [Future<Self>] = []
-			if size > 0{
-				for _ in 1...size{
-					models.append(try self.create(factory: factory, on: conn))
-				}
-			}
-			return models.flatten(on: conn)
-		})
+        var models: [Future<Self>] = []
+        if size > 0{
+            for _ in 1...size{
+                models.append(try self.create(factory: factory, on: conn))
+            }
+        }
+        return models.flatten(on: conn)
+
 	}
 
 	@discardableResult
@@ -51,13 +50,11 @@ extension Model where Self: Decodable{
 
 	@discardableResult
 	static public func findOrCreateBatch(ids: [IDValue], factory: ModelFactory<Self>, on conn: Database) throws -> Future<[Self]>{
-		return Future.flatMap(on: conn, { () -> Future<[Self]> in
-			var models: [Future<Self>] = []
-			for id in ids{
-				models.append(try self.findOrCreate(id: id, factory: factory, on: conn))
-			}
-			return models.flatten(on: conn)
-		})
+        var models: [Future<Self>] = []
+        for id in ids{
+            models.append(try self.findOrCreate(id: id, factory: factory, on: conn))
+        }
+        return models.flatten(on: conn)
 	}
 
 	@discardableResult
@@ -77,8 +74,8 @@ extension Model where Self: Decodable{
 fileprivate extension Future where Value: Vapor.OptionalType {
 	/// Unwraps an optional value contained inside a Future's expectation.
 	/// If the optional resolves to `nil` (`.none`), the supplied error will be thrown instead.
-	fileprivate func unwrap(or resolve: @escaping () -> Future<Value.WrappedType>) -> Future<Value.WrappedType> {
-		return flatMap(to: Value.WrappedType.self) { optional in
+    func unwrap(or resolve: @escaping () -> Future<Value.WrappedType>) -> Future<Value.WrappedType> {
+		return flatMap { optional in
 			guard let _ = optional.wrapped else {
 				return resolve()
 			}

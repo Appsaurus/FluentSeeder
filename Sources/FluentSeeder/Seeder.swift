@@ -12,13 +12,13 @@ public protocol Seeder: Migration{
 	static func seeds() -> [SeedProtocol]
 }
 extension Seeder{
-	public static func prepare(on conn: Database.Connection) -> EventLoopFuture<Void> {
-		return seeds().map { (seed) -> Future<Void> in
+	public static func prepare(on conn: Database) -> EventLoopFuture<Void> {
+		return seeds().map { seed in
 			return seed.prepare(on: conn)
-			}.flatten(on: conn)
+        }.flatten(on: conn.eventLoop)
 	}
 
-	public static func revert(on conn: Database.Connection) -> EventLoopFuture<Void> {
+	public static func revert(on conn: Database) -> EventLoopFuture<Void> {
 		return .done(on: conn)
 	}
 }
