@@ -17,8 +17,8 @@ import Vapor
 public typealias Seedable = Model & Decodable
 
 public protocol SeedProtocol{
-	func prepare(on conn: DatabaseConnectable) -> Future<Void>
-	func revert(on conn: DatabaseConnectable) -> Future<Void>
+	func prepare(on conn: Database) -> Future<Void>
+	func revert(on conn: Database) -> Future<Void>
 }
 
 open class Seed<M: Seedable>: SeedProtocol where M.Database: MigrationSupporting{
@@ -29,11 +29,11 @@ open class Seed<M: Seedable>: SeedProtocol where M.Database: MigrationSupporting
 		self.factory = factory
 	}
 
-	open func prepare(on conn: DatabaseConnectable) -> EventLoopFuture<Void> {
+	open func prepare(on conn: Database) -> EventLoopFuture<Void> {
 		return try! M.createBatch(size: count, factory: self.factory, on: conn).transform(to: ())
 	}
 
-	open func revert(on conn: DatabaseConnectable) -> EventLoopFuture<Void> {
+	open func revert(on conn: Database) -> EventLoopFuture<Void> {
 		return .done(on: conn)
 	}
 }
@@ -73,7 +73,7 @@ where M.Database: JoinSupporting, M.Database == M.Left.Database, M.Database == M
 		self.direction = direction
 	}
 
-	open func prepare(on conn: DatabaseConnectable) -> EventLoopFuture<Void> {
+	open func prepare(on conn: Database) -> EventLoopFuture<Void> {
 		switch direction{
 		case .leftToRight:
 			return M.attachRandomSiblings(count: count, from: leftQuery, to: rightQuery, on: conn)
@@ -82,7 +82,7 @@ where M.Database: JoinSupporting, M.Database == M.Left.Database, M.Database == M
 		}
 	}
 
-	open func revert(on conn: DatabaseConnectable) -> EventLoopFuture<Void> {
+	open func revert(on conn: Database) -> EventLoopFuture<Void> {
 		return .done(on: conn)
 	}
 }
@@ -120,7 +120,7 @@ open class ChildSeed<Parent, Child>: SeedProtocol where Child: Model, Parent: Mo
 		self.keyPath = keyPath
 	}
 
-	open func prepare(on conn: DatabaseConnectable) -> EventLoopFuture<Void> {
+	open func prepare(on conn: Database) -> EventLoopFuture<Void> {
 			return Parent.attachRandomChildren(count: count,
 											   from: childQuery,
 											   to: parentQuery,
@@ -128,7 +128,7 @@ open class ChildSeed<Parent, Child>: SeedProtocol where Child: Model, Parent: Mo
 											   on: conn)
 	}
 
-	open func revert(on conn: DatabaseConnectable) -> EventLoopFuture<Void> {
+	open func revert(on conn: Database) -> EventLoopFuture<Void> {
 		return .done(on: conn)
 	}
 }
@@ -148,14 +148,14 @@ open class ParentSeed<Parent, Child>: SeedProtocol where Child: Model, Parent: M
 	}
 
 
-	open func prepare(on conn: DatabaseConnectable) -> EventLoopFuture<Void> {
+	open func prepare(on conn: Database) -> EventLoopFuture<Void> {
 		return Child.attachRandomParent(from: parentQuery,
 										to: childQuery,
 										at: keyPath,
 										on: conn)
 	}
 
-	open func revert(on conn: DatabaseConnectable) -> EventLoopFuture<Void> {
+	open func revert(on conn: Database) -> EventLoopFuture<Void> {
 		return .done(on: conn)
 	}
 }
@@ -165,14 +165,14 @@ extension QueryBuilder{
 	/// Perform async operations on every result of a query.
 	///
 	/// - Parameters:
-	///   - conn: The DatabaseConnectable to perform they query on.
+	///   - conn: The Database to perform they query on.
 	///   - iteration: Logic to perform on each result.
 	/// - Returns: A void future when all iterations have been completed.
-	public func iterateVoid(on conn: DatabaseConnectable, _ iteration: @escaping (Result) -> Future<Void>) -> Future<Void>{
+	public func iterateVoid(on conn: Database, _ iteration: @escaping (Result) -> Future<Void>) -> Future<Void>{
 		return iterate(on: conn, iteration).transform(to: ())
 	}
 
-	public func iterate<T>(on conn: DatabaseConnectable, _ iteration: @escaping (Result) -> Future<T>) -> Future<[T]>{
+	public func iterate<T>(on conn: Database, _ iteration: @escaping (Result) -> Future<T>) -> Future<[T]>{
 		let models = all()
 		return models.flatMap(to: [T].self) { models in
 			var futureVoids: [Future<T>] = []
@@ -188,7 +188,7 @@ extension Model {
 	public static func attachRandomParent<P: Model>(from parentQuery: QueryBuilder<P.Database, P>? = nil,
 													to childQuery: QueryBuilder<Database, Self>? = nil,
 													at keyPath: WritableKeyPath<Self, P.ID?>,
-													on conn: DatabaseConnectable) -> Future<Void>{
+													on conn: Database) -> Future<Void>{
 		let childQuery = childQuery ?? query(on: conn)
 		return childQuery.iterate(on: conn) { (child) -> EventLoopFuture<Self> in
 			let futureParent = parentQuery?.random() ?? P.random(on: conn)
@@ -204,7 +204,7 @@ extension Model {
 													  from childQuery: QueryBuilder<C.Database, C>? = nil,
 													  to parentQuery: QueryBuilder<Database, Self>? = nil,
 													  at keyPath: WritableKeyPath<C, ID?>,
-													  on conn: DatabaseConnectable) -> Future<Void>{
+													  on conn: Database) -> Future<Void>{
 		let parentQuery = parentQuery ?? query(on: conn)
 		return parentQuery.iterate(on: conn) { (model) -> EventLoopFuture<[C]> in
 			let futureChildren = childQuery?.random(count: count) ?? C.random(on: conn, count: count)
@@ -221,7 +221,7 @@ extension Model {
 	public static func attachAllChildren<C: Model>(from childQuery: QueryBuilder<C.Database, C>? = nil,
 												   to parentQuery: QueryBuilder<Database, Self>? = nil,
 												   at keyPath: WritableKeyPath<C, ID?>,
-												   on conn: DatabaseConnectable) -> Future<Void>{
+												   on conn: Database) -> Future<Void>{
 		let parentQuery = parentQuery ?? query(on: conn)
 		return parentQuery.iterate(on: conn) { (model) -> EventLoopFuture<[C]> in
 			let futureChildren = childQuery?.all() ?? C.query(on: conn).all()
@@ -240,7 +240,7 @@ extension ModifiablePivot where Self: Migration, Database: JoinSupporting, Datab
 	public static func attachRandomSiblings(count: Int,
 										   from rightQuery: QueryBuilder<Database, Right>? = nil,
 										   to leftQuery: QueryBuilder<Database, Left>? = nil,
-										   on conn: DatabaseConnectable) -> Future<Void>{
+										   on conn: Database) -> Future<Void>{
 		let leftQuery = leftQuery ?? Left.query(on: conn)
 		return leftQuery.iterate(on: conn, { (model) -> EventLoopFuture<[Self]> in
 			let modelsToAttach = rightQuery?.random(count: count) ?? Right.random(on: conn, count: count)
@@ -254,7 +254,7 @@ extension ModifiablePivot where Self: Migration, Database: JoinSupporting, Datab
 	public static func attachRandomSiblings(count: Int,
 										   from leftQuery: QueryBuilder<Database, Left>? = nil,
 										   to rightQuery: QueryBuilder<Database, Right>? = nil,
-										   on conn: DatabaseConnectable) -> Future<Void>{
+										   on conn: Database) -> Future<Void>{
 		let rightQuery = rightQuery ?? Right.query(on: conn)
 		return rightQuery.iterate(on: conn, { (model) -> EventLoopFuture<[Self]> in
 			let modelsToAttach = leftQuery?.random(count: count) ?? Left.random(on: conn, count: count)

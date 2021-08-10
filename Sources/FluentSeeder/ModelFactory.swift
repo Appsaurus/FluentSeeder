@@ -21,12 +21,12 @@ public enum ModelFactory<M: Model>{
 	case emptyInitialized
 	case custom(initializer: () -> M)
 
-	public func initializeModel(id: M.ID? = nil) throws -> M{
+	public func initializeModel(id: M.IDValue? = nil) throws -> M{
 		var model: M!
 		switch self{
 		case .random:
 			model = try RandomFactory.shared.randomized(type: M.self, overrides: { (property) -> Any? in
-				if property.type == Optional<M.ID>.self{
+				if property.type == Optional<M.IDValue>.self{
 					return RandomFactory.explicitNil
 				}
 				return nil //Let the default behavior generate a random value for this property
