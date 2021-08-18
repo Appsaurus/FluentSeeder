@@ -1,60 +1,30 @@
 import XCTest
 @testable import FluentSeeder
-import FluentTestUtils
+import FluentTestModels
 import Vapor
 import Fluent
-import FluentSQLite
+
 
 fileprivate let exampleModelCount = 50
 fileprivate let exampleSiblingModelCount = 25
 fileprivate let exampleChildModelCount = 10
 fileprivate let siblingsPerExampleModel = 10
 
-final class FluentSeederTests: FluentTestCase {
-	//MARK: Linux Testing
-	static var allTests = [
-		("testLinuxTestSuiteIncludesAllTests", testLinuxTestSuiteIncludesAllTests),
-		("testSeed", testSeed),
-		("testSiblingsSeed", testSiblingsSeed),
-		("testParentSeed", testParentSeed)
-	]
-
-	func testLinuxTestSuiteIncludesAllTests(){
-		assertLinuxTestCoverage(tests: type(of: self).allTests)
-	}
-
-	let sqlite: SQLiteDatabase = try! SQLiteDatabase(storage: .memory)
-
-	open override func register(_ services: inout Services) throws {
-		try services.register(FluentSQLiteProvider())
-		services.register(sqlite)
-	}
-	open override func configure(databases: inout DatabasesConfig) throws{
-		databases.add(database: sqlite, as: .sqlite)
-	}
-
-	open override func configure(migrations: inout MigrationConfig){
-		super.configure(migrations: &migrations)
-		migrations.add(model: ExampleModel.self, database: .sqlite)
-		migrations.add(model: ExampleSiblingModel.self, database: .sqlite)
-		migrations.add(model: ExampleChildModel.self, database: .sqlite)
-		migrations.add(model: ExampleModelSiblingPivot.self, database: .sqlite)
-		migrations.add(migration: ExampleSeeder.self, database: .sqlite)
-	}
+final class FluentSeederTests: FluentTestModels.TestCase {
 
 
 
 	//MARK: Tests
 	func testSeed() throws {
-		XCTAssert(model: ExampleModel.self, hasCount: exampleModelCount, on: request)
-		XCTAssert(model: ExampleSiblingModel.self, hasCount: exampleSiblingModelCount, on: request)
-		XCTAssert(model: ExampleChildModel.self, hasCount: exampleChildModelCount, on: request)
+//        XCTAssert(model: KitchenSink.self, hasCount: exampleModelCount, on: app.db)
+//		XCTAssert(model: StudentModel.self, hasCount: exampleSiblingModelCount, on: app.db)
+//		XCTAssert(model: ExampleChildModel.self, hasCount: exampleChildModelCount, on: app.db)
 	}
 
 	func testSiblingsSeed() throws{
-		let models = try ExampleModel.query(on: request).all().wait()
+        let models = try StudentModel.query(on: app.db).all().wait()
 		try models.forEach { (model) in
-			XCTAssertEqual(try model.siblings.query(on: request).count().wait(), siblingsPerExampleModel)
+            XCTAssertEqual(try model.classes.query(on: app.db).count().wait(), siblingsPerExampleModel)
 		}
 	}
 

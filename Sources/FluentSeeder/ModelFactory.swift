@@ -15,7 +15,7 @@ import FluentExtensions
 
 public enum ModelFactory<M: Model>{
 	case random
-	case randomExcluding(keyPaths: [KeyPath<M, Any>])
+	case randomExcluding(keyPaths: [KeyPath<M, AnyQueryableProperty>])
 	case randomWith(overrides: RandomValueGenerator)
 	case randomFrom(factory: RandomFactory)
 	case emptyInitialized
@@ -35,7 +35,7 @@ public enum ModelFactory<M: Model>{
 			model = try RandomFactory.shared.randomized(type: M.self, overrides: overrides)
 		case .randomExcluding(let keyPaths):
 			model = try RandomFactory.shared.randomized(type: M.self, overrides: { (property) -> Any? in
-				guard !keyPaths.contains(where: {$0.propertyName == property.name}) else { return RandomFactory.explicitNil}
+//				guard !keyPaths.contains(where: {$0.propertyName == property.name}) else { return RandomFactory.explicitNil}
 				return nil //Let the default behavior generate a random value for this property
 			})
 		case .randomFrom(let factory):
@@ -51,7 +51,7 @@ public enum ModelFactory<M: Model>{
 		case .custom(let initializer):
 			model = initializer()
 		}
-		model.fluentID = id
+		model.id = id
 		return model
 	}
 }

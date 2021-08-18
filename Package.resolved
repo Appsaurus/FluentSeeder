@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/vapor/console-kit.git",
         "state": {
           "branch": null,
-          "revision": "cfe8bcd58f74ffecb4f536d8237de146b634ecd3",
-          "version": "4.2.6"
+          "revision": "75ea3b627d88221440b878e5dfccc73fd06842ed",
+          "version": "4.2.7"
         }
       },
       {
@@ -78,8 +78,8 @@
         "repositoryURL": "https://github.com/vapor/fluent-kit.git",
         "state": {
           "branch": null,
-          "revision": "2ae4e70b3f90297d7b3df2723fa5d4ef32a6e50e",
-          "version": "1.13.1"
+          "revision": "c0cfc1e6d9a2bbd04d4c583632eb0c09c92ff22c",
+          "version": "1.15.0"
         }
       },
       {
@@ -96,7 +96,7 @@
         "repositoryURL": "https://github.com/Appsaurus/FluentExtensions.git",
         "state": {
           "branch": "vapor-4",
-          "revision": "b33c875f7c0c9300cd2ccf3c6d898a4932aa6217",
+          "revision": "fd9cd9b50d5d0cb570e91075e4dd777f53fa0d34",
           "version": null
         }
       },
@@ -213,8 +213,8 @@
         "repositoryURL": "https://github.com/apple/swift-metrics.git",
         "state": {
           "branch": null,
-          "revision": "e382458581b05839a571c578e90060fff499f101",
-          "version": "2.1.1"
+          "revision": "3edd2f57afc4e68e23c3e4956bc8b65ca6b5b2ff",
+          "version": "2.2.0"
         }
       },
       {
@@ -222,8 +222,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio.git",
         "state": {
           "branch": null,
-          "revision": "9a992ee3de1f8da9f2968fc96b26714834f3105f",
-          "version": "2.31.1"
+          "revision": "0f6a62a87506c8fe63503efbf97cf601e78abf64",
+          "version": "2.32.0"
         }
       },
       {
@@ -240,8 +240,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio-http2.git",
         "state": {
           "branch": null,
-          "revision": "13b6a7a83864005334818d7ea2a3053869a96c04",
-          "version": "1.18.0"
+          "revision": "f6cde03ef8ad57e3bd25743d1e678efd1e5239f7",
+          "version": "1.18.1"
         }
       },
       {
@@ -249,8 +249,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio-ssl.git",
         "state": {
           "branch": null,
-          "revision": "9db7cee4b62c39160a6bd513a47a1ecdcceac18a",
-          "version": "2.14.0"
+          "revision": "4829979d9f5ed9a2f4c6efd9c1ed51d1ab4d0394",
+          "version": "2.14.1"
         }
       },
       {
@@ -258,8 +258,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio-transport-services.git",
         "state": {
           "branch": null,
-          "revision": "39587bceccda72780e2a8a8c5e857e42a9df2fa8",
-          "version": "1.11.0"
+          "revision": "5fd5ba4d3ec6b981b74eedf451d736d6ab85dd0e",
+          "version": "1.11.1"
         }
       },
       {
@@ -278,6 +278,15 @@
           "branch": null,
           "revision": "45d0b3943d9ed2637cb8f7c4fcd4676fc917df9b",
           "version": "4.48.3"
+        }
+      },
+      {
+        "package": "VaporExtensions",
+        "repositoryURL": "https://github.com/Appsaurus/VaporExtensions.git",
+        "state": {
+          "branch": "vapor-4",
+          "revision": "6e9fde13cb73533feccb40e437e9f002b3f13b80",
+          "version": null
         }
       },
       {

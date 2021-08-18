@@ -75,9 +75,11 @@ open class SiblingSeed<From: Model, To: Model, Through: Model>: SeedProtocol {
     open var through: KeyPath<To, SiblingsProperty<To, From, Through>>
 
 	public required init(count: Int = 5,
+                         through: KeyPath<To, SiblingsProperty<To, From, Through>>,
                          fromQuery: QueryBuilder<From>? = nil,
                          toQuery: QueryBuilder<To>? = nil) {
 		self.count = count
+        self.through = through
 		self.fromQuery = fromQuery
 		self.toQuery = toQuery
 	}
@@ -93,9 +95,9 @@ open class SiblingSeed<From: Model, To: Model, Through: Model>: SeedProtocol {
 
 extension SiblingSeed: Migration{
 
-    public static var count: Int{
-		return Self().count
-	}
+//    public static var count: Int{
+//		return Self().count
+//	}
 //	public typealias Database = M.Database
 //	public static func prepare(on conn: M.Database.Connection) -> EventLoopFuture<Void> {
 //		return self<M>.init().prepare(on: conn)

@@ -12,7 +12,6 @@ let package = Package(
         .watchOS(.v6)
     ],
     products: [
-        // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
             name: "FluentSeeder",
             targets: ["FluentSeeder"]),
@@ -25,8 +24,6 @@ let package = Package(
 		.package(url: "https://github.com/Appsaurus/FluentExtensions.git", .branch("vapor-4"))
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "FluentSeeder",
             dependencies: [.product(name: "Vapor", package: "vapor"),
@@ -37,6 +34,7 @@ let package = Package(
             name: "FluentSeederTests",
             dependencies: [.target(name: "FluentSeeder"),
                            .product(name: "Fluent", package: "fluent"),
+                           .product(name: "FluentTestModels", package: "FluentExtensions"),
                            .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver")]),
     ]
 )
