@@ -57,11 +57,11 @@
       },
       {
         "package": "Fakery",
-        "repositoryURL": "https://github.com/Appsaurus/Fakery",
+        "repositoryURL": "https://github.com/vadymmarkov/Fakery",
         "state": {
           "branch": null,
-          "revision": "8d0eafcda7dfd3152a2d86c6c458534428ed3987",
-          "version": "3.4.4"
+          "revision": "71cb3bf36a808534659d1248780c2bf3c4c4fc91",
+          "version": "5.1.0"
         }
       },
       {
@@ -96,7 +96,7 @@
         "repositoryURL": "https://github.com/Appsaurus/FluentExtensions.git",
         "state": {
           "branch": "vapor-4",
-          "revision": "fd9cd9b50d5d0cb570e91075e4dd777f53fa0d34",
+          "revision": "3c8c4a0439fbbd7a69efd040fbbf9db20bfac568",
           "version": null
         }
       },
@@ -122,9 +122,9 @@
         "package": "RandomFactory",
         "repositoryURL": "https://github.com/Appsaurus/RandomFactory.git",
         "state": {
-          "branch": null,
-          "revision": "f760f84ee383ba98de5d1cb2b951c1b18fdb7a56",
-          "version": "1.0.3"
+          "branch": "swift-5.4",
+          "revision": "0aabe1ef318d7b9a43282856a754d1f606409b03",
+          "version": null
         }
       },
       {
@@ -222,8 +222,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio.git",
         "state": {
           "branch": null,
-          "revision": "0f6a62a87506c8fe63503efbf97cf601e78abf64",
-          "version": "2.32.0"
+          "revision": "94f41c4121a82fae5c7b1cb03e630e9f9e5e20f1",
+          "version": "2.32.1"
         }
       },
       {
@@ -240,8 +240,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio-http2.git",
         "state": {
           "branch": null,
-          "revision": "f6cde03ef8ad57e3bd25743d1e678efd1e5239f7",
-          "version": "1.18.1"
+          "revision": "42bdcae4ac4913507a5ee7af963c559deb60d1fc",
+          "version": "1.18.2"
         }
       },
       {
@@ -258,8 +258,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio-transport-services.git",
         "state": {
           "branch": null,
-          "revision": "5fd5ba4d3ec6b981b74eedf451d736d6ab85dd0e",
-          "version": "1.11.1"
+          "revision": "9571a61d236c5253b6a255a2d13fac536a1e2625",
+          "version": "1.11.2"
         }
       },
       {
@@ -294,8 +294,8 @@
         "repositoryURL": "https://github.com/vapor/websocket-kit.git",
         "state": {
           "branch": null,
-          "revision": "a2d26b3de8b3be292f3208d1c74024f76ac503da",
-          "version": "2.1.3"
+          "revision": "d7537b787d37f3877e36b5f1e7cb910f7c401836",
+          "version": "2.1.4"
         }
       }
     ]
