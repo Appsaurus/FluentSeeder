@@ -1,6 +1,6 @@
 //
-//  VaporTestCase.swift
-//  ServasaurusTests
+//  ModelExtensions.swift
+//  FluentSeeder
 //
 //  Created by Brian Strobach on 12/6/17.
 //
@@ -13,23 +13,33 @@ import FluentExtensions
 extension Model where Self: Decodable{
 
 	@discardableResult
-	static public func createSync(id: IDValue? = nil, factory: ModelFactory<Self>, on database: Database) throws -> Self{
+	static public func createSync(id: IDValue? = nil,
+                                  factory: ModelFactory,
+                                  on database: Database) throws -> Self{
 		return try create(id: id, factory: factory, on: database).wait()
 	}
 
 	@discardableResult
-	static public func createBatchSync(size: Int, factory: ModelFactory<Self>, on database: Database) throws -> [Self]{
+	static public func createBatchSync(size: Int,
+                                       factory: ModelFactory,
+                                       on database: Database) throws -> [Self]{
 		return try createBatch(size: size, factory: factory, on: database).wait()
 	}
 
 	@discardableResult
-	static public func create(id: IDValue? = nil, factory: ModelFactory<Self>, on database: Database) throws -> Future<Self>{
-		let model: Self = try factory.initializeModel(id: id)
-		return model.createAndReturn(on: database)
+	static public func create(id: IDValue? = nil,
+                              factory: ModelFactory,
+                              on database: Database) throws -> Future<Self>{
+        return try factory.initializeModel(id: id, on: database).flatMap { (model: Self) in
+            return model.createAndReturn(on: database)
+        }
+
 	}
 
 	@discardableResult
-	static public func createBatch(size: Int, factory: ModelFactory<Self>, on database: Database) throws -> Future<[Self]>{
+	static public func createBatch(size: Int,
+                                   factory: ModelFactory,
+                                   on database: Database) throws -> Future<[Self]>{
         var models: [Future<Self>] = []
         if size > 0{
             for _ in 1...size{
@@ -41,7 +51,9 @@ extension Model where Self: Decodable{
 	}
 
 	@discardableResult
-	static public func findOrCreate(id: IDValue, factory: ModelFactory<Self>,  on database: Database) throws -> Future<Self>{
+	static public func findOrCreate(id: IDValue,
+                                    factory: ModelFactory,
+                                    on database: Database) throws -> Future<Self>{
 		return self.find(id, on: database).unwrap(or: { () -> EventLoopFuture<Self> in
 			return try! self.create(id: id, factory: factory, on: database)
 		})
@@ -49,7 +61,9 @@ extension Model where Self: Decodable{
 	}
 
 	@discardableResult
-	static public func findOrCreateBatch(ids: [IDValue], factory: ModelFactory<Self>, on database: Database) throws -> Future<[Self]>{
+	static public func findOrCreateBatch(ids: [IDValue],
+                                         factory: ModelFactory,
+                                         on database: Database) throws -> Future<[Self]>{
         var models: [Future<Self>] = []
         for id in ids{
             models.append(try self.findOrCreate(id: id, factory: factory, on: database))
@@ -58,19 +72,23 @@ extension Model where Self: Decodable{
 	}
 
 	@discardableResult
-	static public func findOrCreateSync(id: IDValue, factory: ModelFactory<Self>, on database: Database) throws -> Self{
+	static public func findOrCreateSync(id: IDValue,
+                                        factory: ModelFactory,
+                                        on database: Database) throws -> Self{
 		let futureModel: Future<Self> = try findOrCreate(id: id, factory: factory, on: database)
 		let model: Self = try futureModel.wait()
 		return model
 	}
 
 	@discardableResult
-	static public func findOrCreateBatchSync(ids: [IDValue], factory: ModelFactory<Self>, on database: Database) throws -> [Self]{
+	static public func findOrCreateBatchSync(ids: [IDValue],
+                                             factory: ModelFactory,
+                                             on database: Database) throws -> [Self]{
 		return try findOrCreateBatch(ids: ids, factory: factory, on: database).wait()
 	}
 }
 
-//TODO: Refactor this an other helpers into Vapor/Fluent extension libraries.
+//TODO: Refactor this and other helpers into Vapor/Fluent extension libraries.
 fileprivate extension Future where Value: Vapor.OptionalType {
 	/// Unwraps an optional value contained inside a Future's expectation.
 	/// If the optional resolves to `nil` (`.none`), the supplied error will be thrown instead.

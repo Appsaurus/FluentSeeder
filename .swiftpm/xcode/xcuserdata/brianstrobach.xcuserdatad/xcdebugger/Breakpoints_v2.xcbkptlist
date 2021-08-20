@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "2690B84D-011A-42AA-9AAB-F24B68CFDC33"
+            uuid = "5D52596E-94A1-46BB-9C51-DDE1F4526BC6"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../../../../../../Library/Developer/Xcode/DerivedData/FluentSeeder-dornoihmfwnfhjgqxtvtpvowwqyj/SourcePackages/checkouts/RandomFactory/Sources/Shared/RandomInitializable.swift"
+            filePath = "Sources/FluentSeeder/ModelFactory.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
-            landmarkName = "randomDictionary(decodableTo:)"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
+            landmarkName = "randomEncodedData(decodableTo:on:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

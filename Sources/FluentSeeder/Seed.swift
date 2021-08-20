@@ -24,8 +24,8 @@ public protocol SeedProtocol{
 
 open class Seed<M: Seedable>: SeedProtocol {
 	open var count: Int
-	open var factory: ModelFactory<M> = .random
-	public required init(count: Int = 100, factory: ModelFactory<M> = .random) {
+	open var factory: ModelFactory
+    public required init(count: Int = 100, factory: ModelFactory = .fluentFactory()) {
 		self.count = count
 		self.factory = factory
 	}
