@@ -7,8 +7,8 @@ import FluentTestUtils
 import CodableExtensions
 
 fileprivate let kitchenSinkModelCount = 5
-fileprivate let studentModelCount = 10
-fileprivate let classModelCount = 3
+fileprivate let studentModelCount = 20
+fileprivate let classModelCount = 10
 fileprivate let siblingsPerExampleModel = 5
 fileprivate let parentModelCount = 5
 fileprivate let childModelCount = 10
@@ -34,7 +34,7 @@ final class FluentSeederTests: FluentTestModels.TestCase {
 	}
 
 	func testSiblingsSeed() throws{
-        
+
         let models = try StudentModel.query(on: app.db).all().wait()
 		try models.forEach { (model) in
             let classes = try model.$classes.query(on: app.db).all().wait()
