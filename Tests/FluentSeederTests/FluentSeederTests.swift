@@ -1,36 +1,20 @@
 import XCTest
-@testable import FluentSeeder
-import FluentTestModels
-import Vapor
-import Fluent
-import FluentTestUtils
-import CodableExtensions
-
-fileprivate let kitchenSinkModelCount = 5
-fileprivate let studentModelCount = 20
-fileprivate let classModelCount = 10
-fileprivate let siblingsPerExampleModel = 5
-fileprivate let parentModelCount = 5
-fileprivate let childModelCount = 10
+import FluentTestModelSeeder
+import FluentSQLiteDriver
 
 
-final class FluentSeederTests: FluentTestModels.TestCase {
-    override public func configure(_ databases: Databases) throws {
+final class FluentSeederTests: FluentTestModels.SeededTestCase {
+    override func configureTestModelDatabase(_ databases: Databases) {
         databases.use(.sqlite(.memory, connectionPoolTimeout: .minutes(2)), as: .sqlite)
-    }
-
-    override public func migrate(_ migrations: Migrations) throws {
-        try super.migrate(migrations)
-        migrations.add(ExampleSeeder())
-    }
+    }    
 
 	//MARK: Tests
 	func testSeed() throws {
-        XCTAssert(model: KitchenSink.self, hasCount: kitchenSinkModelCount, on: app.db)
-		XCTAssert(model: StudentModel.self, hasCount: studentModelCount, on: app.db)
-        XCTAssert(model: ClassModel.self, hasCount: classModelCount, on: app.db)
-        XCTAssert(model: ParentModel.self, hasCount: parentModelCount, on: app.db)
-		XCTAssert(model: ChildModel.self, hasCount: childModelCount, on: app.db)
+        XCTAssert(model: KitchenSink.self, hasCount: seeder.kitchenSinkModelCount, on: app.db)
+        XCTAssert(model: StudentModel.self, hasCount: seeder.studentModelCount, on: app.db)
+        XCTAssert(model: ClassModel.self, hasCount: seeder.classModelCount, on: app.db)
+        XCTAssert(model: ParentModel.self, hasCount: seeder.parentModelCount, on: app.db)
+        XCTAssert(model: ChildModel.self, hasCount: seeder.childModelCount, on: app.db)
 	}
 
 	func testSiblingsSeed() throws{
@@ -38,7 +22,7 @@ final class FluentSeederTests: FluentTestModels.TestCase {
         let models = try StudentModel.query(on: app.db).all().wait()
 		try models.forEach { (model) in
             let classes = try model.$classes.query(on: app.db).all().wait()
-            XCTAssertEqual(classes.count, siblingsPerExampleModel)
+            XCTAssertEqual(classes.count, seeder.classesPerStudent)
 		}
 	}
 
@@ -48,27 +32,17 @@ final class FluentSeederTests: FluentTestModels.TestCase {
 			XCTAssertNotNil(try child.$parent.query(on: app.db).first().wait())
 		}
 	}
-}
 
-public class ExampleSeeder: Seeder{
-    public func seeds(on database: Database) -> [SeedProtocol] {
-        let factory = ModelFactory.fluentFactory()
-        factory.config.register(enumType: TestIntEnum.self)
-        factory.config.register(enumType: TestStringEnum.self)
-        factory.config.register(enumType: TestRawStringEnum.self)
-        factory.config.register(enumType: TestRawIntEnum.self)
-        return [
-            //Seed models first
-            Seed<KitchenSink>(count: kitchenSinkModelCount, factory: factory),
-            Seed<StudentModel>(count: studentModelCount, factory: factory),
-            Seed<ClassModel>(count: classModelCount, factory: factory),
-            Seed<ParentModel>(count: parentModelCount, factory: factory),
-            Seed<ChildModel>(count: childModelCount, factory: factory),
 
-//            //Then relationships that depend on those models existing
-            SiblingSeed<ClassModel, StudentModel, EnrollmentModel>(count: siblingsPerExampleModel,
-                                                                   through: \.$classes),
-            ParentSeed<ParentModel, ChildModel>(at: \ChildModel.$parent)
-        ]
-	}
+    func testSort() throws {
+        let keyPath = try KitchenSink.query(on: app.db).sort(\.$doubleField, .ascending).limit(5).all().wait()
+        let string = try KitchenSink.query(on: app.db).sort("doubleField", .ascending).limit(5).all().wait()
+
+        XCTAssertEqual(keyPath.values(at: \.doubleField), string.values(at: \.doubleField))
+//        XCTAssertEqual(try keyPath[0].encodeAsJSONString(), try string[0].encodeAsJSONString())
+//        XCTAssertEqual(try keyPath[1].encodeAsJSONString(), try string[1].encodeAsJSONString())
+//        XCTAssertEqual(try keyPath[2].encodeAsJSONString(), try string[2].encodeAsJSONString())
+//        XCTAssertEqual(try keyPath[3].encodeAsJSONString(), try string[3].encodeAsJSONString())
+//        XCTAssertEqual(try keyPath[4].encodeAsJSONString(), try string[4].encodeAsJSONString())
+    }
 }
