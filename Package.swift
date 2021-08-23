@@ -16,8 +16,8 @@ let package = Package(
             name: "FluentSeeder",
             targets: ["FluentSeeder"]),
         .library(
-            name: "FluentTestModelSeeder",
-            targets: ["FluentTestModelSeeder"]),
+            name: "FluentTestModelsSeeder",
+            targets: ["FluentTestModelsSeeder"]),
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", .upToNextMajor(from: "4.0.0")),
@@ -34,12 +34,12 @@ let package = Package(
                            .product(name: "RandomFactory", package: "RandomFactory"),
                            .product(name: "FluentExtensions", package: "FluentExtensions")]),
         .target(
-            name: "FluentTestModelSeeder",
+            name: "FluentTestModelsSeeder",
             dependencies: [.target(name: "FluentSeeder"),
                            .product(name: "FluentTestModels", package: "FluentExtensions")]),
         .testTarget(
             name: "FluentSeederTests",
-            dependencies: [.target(name: "FluentTestModelSeeder"),
+            dependencies: [.target(name: "FluentTestModelsSeeder"),
                            .product(name: "Fluent", package: "fluent"),
                            .product(name: "FluentTestModels", package: "FluentExtensions"),
                            .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver")]),

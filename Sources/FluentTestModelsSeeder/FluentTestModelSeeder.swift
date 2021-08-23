@@ -1,5 +1,5 @@
 //
-//  FluentTestModelSeeder.swift
+//  FluentTestModelsSeeder.swift
 //  
 //
 //  Created by Brian Strobach on 8/23/21.
@@ -7,7 +7,7 @@
 
 import FluentTestModels
 
-public class FluentTestModelSeeder: Seeder{
+public class FluentTestModelsSeeder: Seeder{
 
     public var kitchenSinkModelCount = 5
     public var studentModelCount = 20

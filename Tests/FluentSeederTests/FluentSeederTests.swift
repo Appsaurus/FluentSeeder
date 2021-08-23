@@ -1,7 +1,7 @@
 import XCTest
-import FluentTestModelSeeder
+import FluentTestModelsSeeder
 import FluentSQLiteDriver
-
+import FluentTestUtils
 
 final class FluentSeederTests: FluentTestModels.SeededTestCase {
     override func configureTestModelDatabase(_ databases: Databases) {

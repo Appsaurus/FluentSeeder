@@ -9,7 +9,7 @@ import FluentTestModels
 extension FluentTestModels {
     open class SeededTestCase: FluentTestModels.TestCase {
 
-        open var seeder = FluentTestModelSeeder()
+        open var seeder = FluentTestModelsSeeder()
         open var autoSeed: Bool {
             return true
         }
