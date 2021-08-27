@@ -96,7 +96,7 @@
         "repositoryURL": "https://github.com/Appsaurus/FluentExtensions.git",
         "state": {
           "branch": "vapor-4",
-          "revision": "69098a2d497049afc99ee5374f2b44cf885708c9",
+          "revision": "7149b46f8b6d20aa1b26339e89de5c56c375dbe9",
           "version": null
         }
       },
@@ -123,7 +123,7 @@
         "repositoryURL": "https://github.com/Appsaurus/RandomFactory.git",
         "state": {
           "branch": "swift-5.4",
-          "revision": "e397ec2c1c5529ab9cfd078b5d837dc8d6774dab",
+          "revision": "8968a46b50029b832f04f534181841f2495db687",
           "version": null
         }
       },
@@ -150,8 +150,8 @@
         "repositoryURL": "https://github.com/Appsaurus/RuntimeExtensions",
         "state": {
           "branch": null,
-          "revision": "f47b6e7e21e0fb5dc5785b77a1cac9a35dbe28e3",
-          "version": "0.1.6"
+          "revision": "362eeb8bead1cc92feeb251201728b9e6ffc6554",
+          "version": "0.1.8"
         }
       },
       {
@@ -285,7 +285,7 @@
         "repositoryURL": "https://github.com/Appsaurus/VaporExtensions.git",
         "state": {
           "branch": "vapor-4",
-          "revision": "6e9fde13cb73533feccb40e437e9f002b3f13b80",
+          "revision": "f60e54e917a9413e7fa5bbdbb002677c730e0b63",
           "version": null
         }
       },
