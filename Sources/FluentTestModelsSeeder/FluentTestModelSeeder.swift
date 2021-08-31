@@ -27,15 +27,15 @@ public class FluentTestModelsSeeder: Seeder{
         return [
             //Seed models first
             Seed<KitchenSink>(count: kitchenSinkModelCount, factory: factory),
-            Seed<StudentModel>(count: studentModelCount, factory: factory),
-            Seed<ClassModel>(count: classModelCount, factory: factory),
-            Seed<ParentModel>(count: parentModelCount, factory: factory),
-            Seed<ChildModel>(count: childModelCount, factory: factory),
+            Seed<TestStudentModel>(count: studentModelCount, factory: factory),
+            Seed<TestClassModel>(count: classModelCount, factory: factory),
+            Seed<TestParentModel>(count: parentModelCount, factory: factory),
+            Seed<TestChildModel>(count: childModelCount, factory: factory),
 
 //            //Then relationships that depend on those models existing
-            SiblingSeed<ClassModel, StudentModel, EnrollmentModel>(count: classesPerStudent,
+            SiblingSeed<TestClassModel, TestStudentModel, TestEnrollmentModel>(count: classesPerStudent,
                                                                    through: \.$classes),
-            ParentSeed<ParentModel, ChildModel>(at: \ChildModel.$parent)
+            ParentSeed<TestParentModel, TestChildModel>(at: \TestChildModel.$parent)
         ]
     }
 }

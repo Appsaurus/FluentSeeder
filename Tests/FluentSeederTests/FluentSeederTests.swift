@@ -11,15 +11,15 @@ final class FluentSeederTests: FluentTestModels.SeededTestCase {
 	//MARK: Tests
 	func testSeed() throws {
         XCTAssert(model: KitchenSink.self, hasCount: seeder.kitchenSinkModelCount, on: app.db)
-        XCTAssert(model: StudentModel.self, hasCount: seeder.studentModelCount, on: app.db)
-        XCTAssert(model: ClassModel.self, hasCount: seeder.classModelCount, on: app.db)
-        XCTAssert(model: ParentModel.self, hasCount: seeder.parentModelCount, on: app.db)
-        XCTAssert(model: ChildModel.self, hasCount: seeder.childModelCount, on: app.db)
+        XCTAssert(model: TestStudentModel.self, hasCount: seeder.studentModelCount, on: app.db)
+        XCTAssert(model: TestClassModel.self, hasCount: seeder.classModelCount, on: app.db)
+        XCTAssert(model: TestParentModel.self, hasCount: seeder.parentModelCount, on: app.db)
+        XCTAssert(model: TestChildModel.self, hasCount: seeder.childModelCount, on: app.db)
 	}
 
 	func testSiblingsSeed() throws{
 
-        let models = try StudentModel.query(on: app.db).all().wait()
+        let models = try TestStudentModel.query(on: app.db).all().wait()
 		try models.forEach { (model) in
             let classes = try model.$classes.query(on: app.db).all().wait()
             XCTAssertEqual(classes.count, seeder.classesPerStudent)
@@ -27,7 +27,7 @@ final class FluentSeederTests: FluentTestModels.SeededTestCase {
 	}
 
 	func testParentSeed() throws{
-        let children = try ChildModel.query(on: app.db).all().wait()
+        let children = try TestChildModel.query(on: app.db).all().wait()
 		try children.forEach { (child) in
 			XCTAssertNotNil(try child.$parent.query(on: app.db).first().wait())
 		}

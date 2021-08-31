@@ -96,7 +96,7 @@
         "repositoryURL": "https://github.com/Appsaurus/FluentExtensions.git",
         "state": {
           "branch": "vapor-4",
-          "revision": "e73e2508a7c5411216f8215fd9cab1221c7ae70f",
+          "revision": "1edc69b55e64016021a490ae951918e4791f39da",
           "version": null
         }
       },
@@ -150,8 +150,8 @@
         "repositoryURL": "https://github.com/Appsaurus/RuntimeExtensions",
         "state": {
           "branch": null,
-          "revision": "c7e366f29d1e8f5a0bf85267e2846a3ddd0e8a7e",
-          "version": "0.1.10"
+          "revision": "89cd1f51a29091534a106a857517ad7f2f16ba89",
+          "version": "0.1.11"
         }
       },
       {
