@@ -23,7 +23,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/vapor.git", .upToNextMajor(from: "4.0.0")),
         .package(url: "https://github.com/vapor/fluent.git", .upToNextMajor(from:"4.0.0")),
 		.package(url: "https://github.com/vapor/fluent-sqlite-driver.git", .upToNextMajor(from:"4.0.0")),
-		.package(url: "https://github.com/Appsaurus/RandomFactory.git", .branch("swift-5.4")),
+        .package(url: "https://github.com/Appsaurus/RandomFactory.git", .upToNextMajor(from: "1.0.4")),
         .package(url: "https://github.com/Appsaurus/FluentExtensions.git", .upToNextMajor(from:"1.0.0"))
     ],
     targets: [

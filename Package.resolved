@@ -122,9 +122,9 @@
         "package": "RandomFactory",
         "repositoryURL": "https://github.com/Appsaurus/RandomFactory.git",
         "state": {
-          "branch": "swift-5.4",
+          "branch": null,
           "revision": "c4f4864b91aaba728824e6bc087caf4d437a8236",
-          "version": null
+          "version": "1.0.4"
         }
       },
       {
