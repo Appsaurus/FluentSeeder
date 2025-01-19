@@ -1,4 +1,4 @@
-// swift-tools-version:5.4
+// swift-tools-version:5.7
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "FluentSeeder",
     platforms: [
-        .macOS(.v10_15),
+        .macOS(.v12),
         .iOS(.v13),
         .tvOS(.v13),
         .watchOS(.v6)
@@ -20,11 +20,11 @@ let package = Package(
             targets: ["FluentTestModelsSeeder"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/vapor.git", .upToNextMajor(from: "4.0.0")),
-        .package(url: "https://github.com/vapor/fluent.git", .upToNextMajor(from:"4.0.0")),
-		.package(url: "https://github.com/vapor/fluent-sqlite-driver.git", .upToNextMajor(from:"4.0.0")),
-        .package(url: "https://github.com/Appsaurus/RandomFactory.git", .upToNextMajor(from: "1.0.4")),
-        .package(url: "https://github.com/Appsaurus/FluentExtensions.git", .upToNextMajor(from:"1.0.0"))
+        .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
+        .package(url: "https://github.com/vapor/fluent.git", from:"4.0.0"),
+		.package(url: "https://github.com/vapor/fluent-sqlite-driver.git", from:"4.0.0"),
+        .package(url: "https://github.com/Appsaurus/RandomFactory.git", from: "1.0.4"),
+        .package(url: "https://github.com/Appsaurus/FluentExtensions.git", from:"1.3.0")
     ],
     targets: [
         .target(

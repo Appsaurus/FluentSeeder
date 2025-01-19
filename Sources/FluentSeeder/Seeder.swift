@@ -8,20 +8,22 @@
 import Foundation
 import Fluent
 
-public protocol Seeder: Migration{
+public protocol Seeder: AsyncMigration{
     func seeds(on database: Database) -> [SeedProtocol]
 }
 extension Seeder{
 
-	public func prepare(on database: Database) -> EventLoopFuture<Void> {        
-        return seeds(on: database).map { seed in
-			return seed.prepare(on: database)
-        }.flatten(on: database.eventLoop)
-	}
+    public func prepare(on database: Database) async throws {
+        try await seeds(on: database).asyncForEach { seed in
+            try await seed.prepare(on: database)
+        }
+    }
+    public func revert(on database: Database) async throws {
+        try await seeds(on: database).asyncForEach { seed in
+            try await seed.revert(on: database)
+        }
+    }
 
-	public func revert(on database: Database) -> EventLoopFuture<Void> {
-		return .done(on: database)
-	}
 }
 
 

@@ -17,49 +17,43 @@ import FluentExtensions
 open class ModelFactory: RandomFactory {
 
 
-    public func initializeModel<M: Model>(id: M.IDValue? = nil, on database: Database) throws -> Future<M> {
-        try self.randomized(type: M.self, on: database).map { model in
-            model.id = id
-            return model
-        }
+    public func initializeModel<M: Model>(id: M.IDValue? = nil, on database: Database) async throws -> M {
+        let model = try await self.randomized(type: M.self, on: database)
+        model.id = id
+        return model
     }
 
-    open func randomized<M: Model>(type: M.Type = M.self, on database: Database) throws -> Future<M>{
-        try randomEncodedData(decodableTo: type, on: database).flatMapThrowing { data in
-            return try M.decode(fromJSON: data, using: self.config.jsonDecoder)
-        }
-
+    open func randomized<M: Model>(type: M.Type = M.self, on database: Database) async throws -> M {
+        let data = try await randomEncodedData(decodableTo: type, on: database)
+        return try M.decode(fromJSON: data, using: self.config.jsonDecoder)
     }
 
-    public func resolveRelationships<M: Model>(for type: M.Type, on database: Database) throws -> Future<[String: Any]> {
-        var futureValues: [Future<[String: Any]>] = []
+    public func resolveRelationships<M: Model>(for type: M.Type, on database: Database) async throws -> [String: Any] {
+        var values: [[String: Any]] = []
         for property in try properties(type) {
-            if let generatable = property.type as? RandomGeneratable.Type, case let .asyncGenerator(generator) = generatable.strategy {
-                let futureValue = generator(database).map { value in
-                    return [self.config.codableKeyMapper(property.name) : ["id" : value]] as [String: Any]
-                }
-                futureValues.append(futureValue)
+            if let generatable = property.type as? RandomGeneratable.Type,
+               case let .asyncGenerator(generator) = generatable.strategy {
+                let value = try await generator(database)
+                values.append([self.config.codableKeyMapper(property.name): ["id": value]])
             }
         }
-        guard futureValues.count > 0 else { return database.eventLoop.future([:])}
-        return futureValues.flatten(on: database).map { values in
-            var allValues: [String: Any] = [:]
-            for value in values {
-                allValues = allValues.merging(value, uniquingKeysWith: {lhs, _ in return lhs })
-            }
-            return allValues
+        guard !values.isEmpty else { return [:] }
+        
+        var allValues: [String: Any] = [:]
+        for value in values {
+            allValues = allValues.merging(value, uniquingKeysWith: { lhs, _ in lhs })
         }
-
+        return allValues
     }
 
-    open func randomEncodedData<M: Model>(decodableTo type: M.Type, on database: Database) throws -> Future<Data>{
+    open func randomEncodedData<M: Model>(decodableTo type: M.Type, on database: Database) async throws -> Data {
         var dict = try randomDictionary(decodableTo: type)
-        return try resolveRelationships(for: type, on: database).flatMapThrowing { asyncDict in
-            for (key, value) in asyncDict {
-                dict[key] = value
-            }
-            return try dict.encodeAsJSONData(using: self.config.jsonEncoder)
+        let asyncDict = try await resolveRelationships(for: type, on: database)
+        for (key, value) in asyncDict {
+            dict[key] = value
         }
+        
+        return try dict.encodeAsJSONData(using: self.config.jsonEncoder)
     }
 }
 
@@ -103,7 +97,7 @@ public enum GenerationStrategy {
     case skip
     case factory(_ generatedType: Any.Type)
     case custom(_ generator: () -> Any)
-    case asyncGenerator(_ generator: (_ : Database) -> Future<Any>)
+    case asyncGenerator(_ generator: (_ : Database) async throws -> Any)
 }
 public protocol RandomGeneratable {
     static var strategy: GenerationStrategy { get }
@@ -137,15 +131,16 @@ extension OptionalEnumProperty: RandomGeneratable {
 extension ParentProperty: RandomGeneratable {
     public static var strategy: GenerationStrategy {
         return .asyncGenerator({ database in
-            return Value.query(on: database).random().flatMapThrowing { model in
-                guard let id = try model?.requireID() else {
-                    fatalError("You must seed \(Value.self) before its dependents.")
-                }
-                if let uuid = id as? UUID {
-                    return uuid.uuidString
-                }
-                return id
+            guard let model = try await Value.query(on: database).random() else {
+                fatalError("You must seed \(Value.self) before its dependents.")
             }
+            let id = try model.requireID()
+            
+            if let uuid = id as? UUID {
+                return uuid.uuidString
+            }
+            return id
+            
         })
         //        return .factory(Value.self)
         //        return .custom {
@@ -173,7 +168,23 @@ extension TimestampProperty: RandomGeneratable {
 }
 
 extension OptionalParentProperty: RandomGeneratable {
-    public static var strategy: GenerationStrategy { .skip }
+    public static var strategy: GenerationStrategy {
+        return .custom({ 
+            return ["id" : nil]
+            // 50% chance of having an optional parent
+//            guard Bool.random() else { return nil }
+//            
+//            guard let model = try await Value.query(on: database).random() else {
+//                return nil
+//            }
+//            let id = try model.requireID()
+//            
+//            if let uuid = id as? UUID {
+//                return uuid.uuidString
+//            }
+//            return id
+        })
+    }
 }
 
 extension ChildrenProperty: RandomGeneratable {
@@ -187,6 +198,3 @@ extension OptionalChildProperty: RandomGeneratable {
 extension SiblingsProperty: RandomGeneratable {
     public static var strategy: GenerationStrategy { .skip }
 }
-
-
-

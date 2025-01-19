@@ -32,7 +32,7 @@ public class FluentTestModelsSeeder: Seeder{
             Seed<TestParentModel>(count: parentModelCount, factory: factory),
             Seed<TestChildModel>(count: childModelCount, factory: factory),
 
-//            //Then relationships that depend on those models existing
+            //Then relationships that depend on those models existing
             SiblingSeed<TestClassModel, TestStudentModel, TestEnrollmentModel>(count: classesPerStudent,
                                                                    through: \.$classes),
             ParentSeed<TestParentModel, TestChildModel>(at: \TestChildModel.$parent)
